@@ -1,0 +1,23 @@
+<application xmlns="http://wadl.dev.java.net/2009/02" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <grammars></grammars>
+    <resources base="http://localhost:8080/ShipAssist-Services/services/api">
+        {% for resource in resources %}
+            <resource path="{{ resource.url }}">
+                <method name="{{ resource.methods }}" function="{{ resource.func }}">
+                    <request>
+                        {% for para in resource.paras %}
+                            <param name="{{ para }}" type="xs:string"/>
+                        {% endfor %}
+                    </request>
+                    <response>
+                        {% for res in resource.response_type %}
+                            <representation mediaType="{{ res }}">
+                                <param name="result" type="xs:string"/>
+                            </representation>
+                        {% endfor %}
+                    </response>
+                </method>
+            </resource>
+        {% endfor %}
+    </resources>
+</application>
