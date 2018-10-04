@@ -49,6 +49,45 @@ task3 = {
     'content_type': 'div',
     'content_identify_text': 'content'
 }
+task4 = {
+    'server': "https://www.biqugexsw.com",
+    'target': "https://www.biqugexsw.com/77_77088/",
+    'path': "F:\\迅雷下载\\我的神秘老公.txt",
+    'bookname': "我的神秘老公",
+    'list_identify': 'class',
+    'list_type': 'div',
+    'list_identify_text': 'listmain',
+    'list_element': 'dd',
+    'content_identify': 'id',
+    'content_type': 'div',
+    'content_identify_text': 'content'
+}
+task5 = {
+    'server': "https://www.heiyan.la/shu/3439/",
+    'target': "https://www.heiyan.la/shu/3439/",
+    'path': "F:\\迅雷下载\\对月吟歌醉一生.txt",
+    'bookname': "对月吟歌醉一生",
+    'list_identify': 'id',
+    'list_type': 'div',
+    'list_identify_text': 'list',
+    'list_element': 'dd',
+    'content_identify': 'id',
+    'content_type': 'div',
+    'content_identify_text': 'content'
+}
+task6 = {
+    'server': "http://www.f96.net",
+    'target': "http://www.f96.net/11/11554/",
+    'path': "F:\\迅雷下载\\你若深情我必痴心.txt",
+    'bookname': "你若深情我必痴心",
+    'list_identify': 'class',
+    'list_type': 'ul',
+    'list_identify_text': 'mulu_list',
+    'list_element': 'li',
+    'content_identify': 'id',
+    'content_type': 'div',
+    'content_identify_text': 'htmlContent'
+}
 queue_names = []
 queue_urls = []
 nums = 0
@@ -183,6 +222,8 @@ def text_modify(texts):
             continue
         elif str(each).__contains__("li"):
             continue
+        elif str(each).__contains__("p"):
+            continue
         else:
             text = text + str(each).replace('\xa0', '  ').replace(
                 "（乡/\村/\小/\说/\网 wｗw.xiａngcｕnxiaｏsｈuo.cｏm）", "")
@@ -268,4 +309,4 @@ def DBUpdate():
 
 
 if __name__ == "__main__":
-    download(task2)
+    download(task5)

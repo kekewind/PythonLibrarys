@@ -18,11 +18,11 @@ NEWSPIDER_MODULE = 'MTNW.spiders'
 # USER_AGENT = 'MTNW (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 CONCURRENT_REQUESTS = 32
-
+LOG_LEVEL = 'WARNING'
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
@@ -38,16 +38,17 @@ COOKIES_ENABLED = True
 # TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
-# DEFAULT_REQUEST_HEADERS = {
-#   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-#   'Accept-Language': 'en',
-# }
 
+# DEFAULT_REQUEST_HEADERS = {
+#     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+#     'Accept-Language': 'en',
+# }
+MEDIA_ALLOW_REDIRECTS = True
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
-# SPIDER_MIDDLEWARES = {
-#    'MTNW.middlewares.MtnwSpiderMiddleware': 543,
-# }
+SPIDER_MIDDLEWARES = {
+    'MTNW.middlewares.MtnwSpiderMiddleware': 543,
+}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
@@ -60,11 +61,11 @@ COOKIES_ENABLED = True
 # EXTENSIONS = {
 #    'scrapy.extensions.telnet.TelnetConsole': None,
 # }
-EXTENSIONS = {'scrapy.contrib.resolver.CachingResolver': 0}
+# EXTENSIONS = {'scrapy.contrib.resolver.CachingResolver': 0}
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'MTNW.pipelines.MtnwPipeline': 300,
+    'MTNW.pipelines.MtnwPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

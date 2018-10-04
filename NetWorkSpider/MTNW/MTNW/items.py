@@ -8,7 +8,13 @@
 import scrapy
 
 
-class MtnwItem(scrapy.Item):
+class ChapterItem(scrapy.Item):
     # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    chapter_name = scrapy.Field()
+    chapter_url = scrapy.Field()
+    num = scrapy.Field()  # 用于绑定章节顺序
+
+
+class DocumentItem(scrapy.Item):
+    content = scrapy.Field()  # 章节内容
+    chapter_name = scrapy.Field()

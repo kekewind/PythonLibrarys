@@ -87,6 +87,7 @@ class TorrentsClaw:
             self.mdb.update('logs', {}, '$set', {'current_page': index, 'isDone': False})
             page_html = self.Http.requests_request('GET', self.task_info['target'].format(index + 1), True)
             if page_html == '':
+                # page_html = self.Http.requests_request('GET', self.task_info['target'].format(index + 1), True)
                 continue
             bes_page = BeautifulSoup(page_html, "html.parser")
             page_txt = bes_page.find_all('div', class_='pages')
@@ -464,19 +465,19 @@ class TorrentsClaw:
         for x in range(2):
             self.claw_miss_identify()
         self.clear_damage_identify()
-        self.previews_claw()
-        for x in range(2):
-            self.claw_miss_previews()
-        if input("\nPlease shutdown proxy and start torrents claw Y/N：").upper() == "Y":
-            self.torrent_claw()
-        for x in range(2):
-            self.claw_miss_torrent()
-        self.clear_damage_torrents()
+        # self.previews_claw()
+        # for x in range(2):
+        #     self.claw_miss_previews()
+        # if input("\nPlease shutdown proxy and start torrents claw Y/N：").upper() == "Y":
+        #     self.torrent_claw()
+        # for x in range(2):
+        #     self.claw_miss_torrent()
+        # self.clear_damage_torrents()
 
 
 task = {
     'server': "http://www.ac168.info/bt/",  # 论坛服务
-    'target': "http://www.ac168.info/bt/thread.php?fid=4&page={0}",  # 论坛页面分页url
+    'target': "http://www.ac168.info/bt/thread.php?fid=5&page={0}",  # 论坛页面分页url
     'tor_server': 'http://www.jandown.com/fetch.php',  # 网盘地址
     'save_type': 'db',  # 文件存储方式
     'path': "G:\\迅雷下载\\Torrents\\",  # 文件存储路径
@@ -489,4 +490,4 @@ task = {
     'content_identify_text': 'tpc_content'
 }
 s = TorrentsClaw(task)
-s.claw_miss_previews()
+s.task_dispatch()
