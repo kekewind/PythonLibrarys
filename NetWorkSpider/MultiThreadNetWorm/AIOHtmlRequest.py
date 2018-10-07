@@ -50,23 +50,23 @@ task3 = {
     'content_identify_text': 'content'
 }
 task4 = {
-    'server': "https://www.biqugexsw.com",
-    'target': "https://www.biqugexsw.com/77_77088/",
-    'path': "F:\\迅雷下载\\我的神秘老公.txt",
-    'bookname': "我的神秘老公",
-    'list_identify': 'class',
+    'server': "http://www.lewenxs.cc/xs/33/33366/",
+    'target': "http://www.lewenxs.cc/xs/33/33366/",
+    'path': "F:\\迅雷下载\\爱你别来无恙.txt",
+    'bookname': "爱你别来无恙",
+    'list_identify': 'id',
     'list_type': 'div',
-    'list_identify_text': 'listmain',
+    'list_identify_text': 'list',
     'list_element': 'dd',
-    'content_identify': 'id',
+    'content_identify': 'class',
     'content_type': 'div',
-    'content_identify_text': 'content'
+    'content_identify_text': 'zhangjieTXT'
 }
 task5 = {
-    'server': "https://www.heiyan.la/shu/3439/",
-    'target': "https://www.heiyan.la/shu/3439/",
-    'path': "F:\\迅雷下载\\对月吟歌醉一生.txt",
-    'bookname': "对月吟歌醉一生",
+    'server': "https://www.biquga.com/3_3306/",
+    'target': "https://www.biquga.com/3_3306/",
+    'path': "F:\\迅雷下载\\风过情海城.txt",
+    'bookname': "风过情海城",
     'list_identify': 'id',
     'list_type': 'div',
     'list_identify_text': 'list',
@@ -76,17 +76,17 @@ task5 = {
     'content_identify_text': 'content'
 }
 task6 = {
-    'server': "http://www.f96.net",
-    'target': "http://www.f96.net/11/11554/",
-    'path': "F:\\迅雷下载\\你若深情我必痴心.txt",
-    'bookname': "你若深情我必痴心",
-    'list_identify': 'class',
-    'list_type': 'ul',
-    'list_identify_text': 'mulu_list',
-    'list_element': 'li',
-    'content_identify': 'id',
+    'server': "https://www.yuanzunxs.cc/go/33366/",
+    'target': "https://www.yuanzunxs.cc/go/33366/",
+    'path': "F:\\迅雷下载\\若情自在天意.txt",
+    'bookname': "若情自在天意",
+    'list_identify': 'id',
+    'list_type': 'div',
+    'list_identify_text': 'list-chapterAll',
+    'list_element': 'dd',
+    'content_identify': 'class',
     'content_type': 'div',
-    'content_identify_text': 'htmlContent'
+    'content_identify_text': 'readcontent'
 }
 queue_names = []
 queue_urls = []

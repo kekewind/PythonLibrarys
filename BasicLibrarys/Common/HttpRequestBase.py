@@ -38,6 +38,7 @@ class HttpRequestBase:
         self.param = params
         self.status_code = [404, 403, 301, 500, 521, 502]
         self.proxys = proxys
+        self.max_retry = 0
 
     def requests_request(self, method, url, codec=False, data=None):
         try:
@@ -63,7 +64,10 @@ class HttpRequestBase:
                     del res
                     return text
             elif self.status_code.__contains__(res.status_code):
-                page = self.__retry_method("requests", method, url)
+                page = ''
+                if self.max_retry < 10:
+                    page = self.__retry_method("requests", method, url)
+                    self.max_retry = self.max_retry + 1
                 if page != "":
                     return page
                 else:
@@ -71,13 +75,19 @@ class HttpRequestBase:
             else:
                 return ""
         except requests.ConnectTimeout or requests.exceptions.ReadTimeout:
-            page = self.__retry_method("requests", method, url)
+            page = ''
+            if self.max_retry < 10:
+                page = self.__retry_method("requests", method, url)
+                self.max_retry = self.max_retry + 1
             if page != "":
                 return page
             else:
                 return ""
         except requests.ConnectionError:
-            page = self.__retry_method("requests", method, url)
+            page = ''
+            if self.max_retry < 10:
+                page = self.__retry_method("requests", method, url)
+                self.max_retry = self.max_retry + 1
             if page != "":
                 return page
             else:
@@ -102,7 +112,10 @@ class HttpRequestBase:
                 else:
                     return str(content, encoding="utf-8")
             elif req.status == 403 or req.status == 404 or req.status == 500:
-                page = self.__retry_method("urllib", method, url)
+                page = ''
+                if self.max_retry < 10:
+                    page = self.__retry_method("urllib", method, url)
+                    self.max_retry = self.max_retry + 1
                 if page != "":
                     return page
                 else:
@@ -110,13 +123,19 @@ class HttpRequestBase:
             else:
                 return ""
         except urllib.error.HTTPError:
-            page = self.__retry_method("urllib", method, url)
+            page = ''
+            if self.max_retry < 10:
+                page = self.__retry_method("urllib", method, url)
+                self.max_retry = self.max_retry + 1
             if page != "":
                 return page
             else:
                 return ""
         except urllib.error.URLError:
-            page = self.__retry_method("urllib", method, url)
+            page = ''
+            if self.max_retry < 10:
+                page = self.__retry_method("urllib", method, url)
+                self.max_retry = self.max_retry + 1
             if page != "":
                 return page
             else:
@@ -143,7 +162,10 @@ class HttpRequestBase:
                 else:
                     return str(content, encoding="utf-8")
             elif res.status == 403 or res.status == 404 or res.status == 500:
-                page = self.__retry_method("urllib3", method, url)
+                page = ''
+                if self.max_retry < 10:
+                    page = self.__retry_method("urllib3", method, url)
+                    self.max_retry = self.max_retry + 1
                 if page != "":
                     return page
                 else:
@@ -151,25 +173,37 @@ class HttpRequestBase:
             else:
                 return ""
         except urllib3.exceptions.ConnectionError:
-            page = self.__retry_method("urllib3", method, url)
+            page = ''
+            if self.max_retry < 10:
+                page = self.__retry_method("urllib3", method, url)
+                self.max_retry = self.max_retry + 1
             if page != "":
                 return page
             else:
                 return ""
         except urllib3.exceptions.HTTPError:
-            page = self.__retry_method("urllib3", method, url)
+            page = ''
+            if self.max_retry < 10:
+                page = self.__retry_method("urllib3", method, url)
+                self.max_retry = self.max_retry + 1
             if page != "":
                 return page
             else:
                 return ""
         except urllib3.exceptions.ConnectTimeoutError:
-            page = self.__retry_method("urllib3", method, url)
+            page = ''
+            if self.max_retry < 10:
+                page = self.__retry_method("urllib3", method, url)
+                self.max_retry = self.max_retry + 1
             if page != "":
                 return page
             else:
                 return ""
         except urllib3.exceptions.RequestError:
-            page = self.__retry_method("urllib3", method, url)
+            page = ''
+            if self.max_retry < 10:
+                page = self.__retry_method("urllib3", method, url)
+                self.max_retry = self.max_retry + 1
             if page != "":
                 return page
             else:
