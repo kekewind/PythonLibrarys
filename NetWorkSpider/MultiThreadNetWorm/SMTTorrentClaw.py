@@ -363,9 +363,7 @@ class TorrentsClaw:
                     self.damage[0] = self.damage[0] + 1
                     self.logger.warning('torrent-error_return')
                     return None
-                with open('e:\\' + job['identify'] + '.torrent', 'wb') as f:
-                    f.write(res.content)
-                tid = self.mdb.insert_singlefile_by_path('torrents', 'e:\\' + job['identify'] + '.torrent')
+                tid = self.mdb.insert_file_stream('torrents', job['identify'] + '.torrent', '.torrent', res.content)
                 self.mdb.update('resources', {'identify': job['identify']}, '$set', {'torrent': tid})
             else:
                 t_path = self.task_info['path'] + f"#{job['identify']}#.torrent"
@@ -381,6 +379,7 @@ class TorrentsClaw:
     def claw_miss_identify(self, limit=None):
         self.total_count = 0
         self.damage[0] = 0
+        self.progress = 0
         res = self.mdb.find_by_kvpair('resources', {}, sort_list=[['timestamp', 'ASC']], limit=limit)
         miss = []
         for each in res:
@@ -436,9 +435,29 @@ class TorrentsClaw:
         for each in miss:
             self.mdb.delete('resources', {'_id': each['_id']})
             self.mdb.update('logs', {}, '$inc', {'total': -1})
+        dep = []
+        for each in res:
+            if not each['identify'] in dep:
+                dep.append(each['identify'])
+            else:
+                self.mdb.delete('resources', {'_id': each['_id']})
+                self.mdb.update('logs', {}, '$inc', {'total': -1})
+
+    def clear_duplicate_image(self, limit=None):
+        pes = self.mdb.find_by_kvpair('previews.files', {}, sort_list=[['timestamp', 'ASC']], limit=limit)
+        res = self.mdb.find_by_kvpair('resources', {}, sort_list=[['timestamp', 'ASC']], limit=limit)
+        dep = []
+        det = []
+        for each in res:
+            dep.append(each['preview'])
+        for each in pes:
+            det.append(str(each['_id']))
+        diff = list(set(det) - set(dep))
+        self.mdb.delete_files('previews', diff)
 
     # 清理丢失的种子
     def clear_damage_torrents(self, limit=None):
+        tes = self.mdb.find_by_kvpair('torrents.files', {}, sort_list=[['timestamp', 'ASC']], limit=limit)
         res = self.mdb.find_by_kvpair('resources', {}, sort_list=[['timestamp', 'ASC']], limit=limit)
         miss = []
         for each in res:
@@ -447,6 +466,14 @@ class TorrentsClaw:
         for each in miss:
             self.mdb.delete('resources', {'_id': each['_id']})
             self.mdb.update('logs', {}, '$inc', {'total': -1})
+        dep = []
+        det = []
+        for each in res:
+            dep.append(each['torrent'])
+        for each in tes:
+            det.append(str(each['_id']))
+        diff = list(set(det) - set(dep))
+        self.mdb.delete_files('torrents', diff)
 
     # 清理数据库
     def clear_db(self):
@@ -459,18 +486,19 @@ class TorrentsClaw:
         self.mdb.update('logs', {}, '$set', {'t_cur_index': 0})
 
     def task_dispatch(self):
-        self.page_claw()
-        self.clear_db()
-        self.identify_claw()
-        for x in range(2):
-            self.claw_miss_identify()
-        self.clear_damage_identify()
-        # self.previews_claw()
+        # self.page_claw()
+        # self.clear_db()
+        # self.identify_claw()
+        # for x in range(5):
+        #     self.claw_miss_identify()
+        # self.clear_damage_identify()
+        self.previews_claw()
         # for x in range(2):
         #     self.claw_miss_previews()
+        # self.clear_duplicate_image()
         # if input("\nPlease shutdown proxy and start torrents claw Y/N：").upper() == "Y":
         #     self.torrent_claw()
-        # for x in range(2):
+        # for x in range(5):
         #     self.claw_miss_torrent()
         # self.clear_damage_torrents()
 

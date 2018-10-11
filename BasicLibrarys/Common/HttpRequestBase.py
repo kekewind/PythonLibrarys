@@ -71,7 +71,7 @@ class HttpRequestBase:
                 if page != "":
                     return page
                 else:
-                    return None
+                    return ''
             else:
                 return ""
         except requests.ConnectTimeout or requests.exceptions.ReadTimeout:
