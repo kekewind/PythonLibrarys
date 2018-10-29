@@ -16,6 +16,7 @@ import urllib3
 class HttpRequestBase:
     def __init__(self, params=None, headers=None, timeout=200, retries=20, redirect=False, proxys=None):
         self.__agent = [
+            'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36',
             'Mozilla/5.0 (Windows; U; Windows NT 5.1; it; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11',
             'Opera/9.25 (Windows NT 5.1; U; en)',
             'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)',

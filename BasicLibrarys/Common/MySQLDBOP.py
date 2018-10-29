@@ -1,22 +1,27 @@
+import uuid
+
 import pymysql
 import datetime
+
 
 class MySQLOP:
     def __init__(self, host, port, db, user, pwd):
         self.host = host if host else '127.0.0.1'
         self.port = port if port else 3306
-        self.db = db if db else "mysql"
+        self.db = db if db else "network_book"
         self.user = user if user else "root"
         self.pwd = pwd if pwd else "qnyh1991"
         self.db = pymysql.connect(self.host, self.user, self.pwd, self.db, self.port)
 
-    def insert(self, table, para):
+    def insert(self, table, para, blob_key=None):
+        if blob_key:
+            para[blob_key] = pymysql.converters.escape_bytes(para[blob_key])
         sql = "INSERT INTO " + table + " ("
         for key in para.keys():
             sql = sql + key + ","
         sql = sql[0: int(len(sql) - 1)] + ") VALUES ("
         for i in range(len(para.keys())):
-            sql = sql + ":" + str(i + 1) + ","
+            sql = sql + "%s,"
         sql = sql[0: len(sql) - 1] + ")"
         cursor = self.db.cursor()
         cursor.execute(sql, list(para.values()))
@@ -55,17 +60,14 @@ class MySQLOP:
         cursor.close()
         return result
 
-    def update(self, table, paras, filters=None, filtersrelations=None, content=None):
+    def update(self, table, paras, filters=None, filtersrelations=None, content=None, blob_key=None):
+        if blob_key:
+            content[blob_key] = pymysql.converters.escape_bytes(content[blob_key])
         sql = "UPDATE " + table + " SET "
         for key in paras:
             sql = sql + key + "="
-            if isinstance(paras[key], (str, datetime.datetime)) and not str(paras[key]).__contains__(":"):
+            if isinstance(paras[key], str) and not str(paras[key]).__contains__("%"):
                 sql = sql + "'" + paras[key] + "',"
-            elif isinstance(paras[key], str) and str(paras[key]).__contains__(":"):
-                if str(paras[key]).index(':') == 0:
-                    sql = sql + str(paras[key]) + ","
-                else:
-                    sql = sql + "'" + paras[key] + "',"
             else:
                 sql = sql + str(paras[key]) + ","
         sql = sql.rstrip(',')
@@ -81,7 +83,7 @@ class MySQLOP:
                     sql = sql + filtersrelations[i]
                     i = i + 1
         cursor = self.db.cursor()
-        cursor.execute(sql, content)
+        cursor.execute(sql, list(content.values()))
         self.db.commit()
         cursor.close()
 

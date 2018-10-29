@@ -45,7 +45,7 @@ task3 = {
     'content_type': 'div',
     'content_identify_text': 'content'
 }
-s = DownloadQueue(task3)
+s = DownloadQueue(task1)
 s1 = DownloadQueue(task2)
 s.download()
 # s1.download()

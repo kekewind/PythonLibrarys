@@ -9,6 +9,7 @@ import redis
 from bs4 import BeautifulSoup
 
 from BasicLibrarys.Common import HttpRequestBase, OracleDBOP
+from BasicLibrarys.Common.MySQLDBOP import MySQLOP
 
 task = {
     'server': "http://www.biqugeg.com",
@@ -37,7 +38,7 @@ task2 = {
     'content_identify_text': 'content'
 }
 task3 = {
-    'server': "https://www.qu.la",
+    "server": "https://www.qu.la",
     'target': "https://www.qu.la/book/85467/",
     'path': "F:\\迅雷下载\\重生之都市仙尊.txt",
     'bookname': "重生之都市仙尊",
@@ -50,43 +51,17 @@ task3 = {
     'content_identify_text': 'content'
 }
 task4 = {
-    'server': "http://www.lewenxs.cc/xs/33/33366/",
-    'target': "http://www.lewenxs.cc/xs/33/33366/",
-    'path': "F:\\迅雷下载\\爱你别来无恙.txt",
-    'bookname': "爱你别来无恙",
-    'list_identify': 'id',
+    "server": "https://www.52nsnovel.com",
+    'target': "https://www.52nsnovel.com/book/167/167167/index.html",
+    'path': "F:\\迅雷下载\\高冷总裁宠妻上瘾.txt",
+    'bookname': "高冷总裁宠妻上瘾",
+    'list_identify': 'class',
     'list_type': 'div',
-    'list_identify_text': 'list',
-    'list_element': 'dd',
-    'content_identify': 'class',
-    'content_type': 'div',
-    'content_identify_text': 'zhangjieTXT'
-}
-task5 = {
-    'server': "https://www.biquga.com/3_3306/",
-    'target': "https://www.biquga.com/3_3306/",
-    'path': "F:\\迅雷下载\\风过情海城.txt",
-    'bookname': "风过情海城",
-    'list_identify': 'id',
-    'list_type': 'div',
-    'list_identify_text': 'list',
-    'list_element': 'dd',
+    'list_identify_text': 'clearfix dirconone',
+    'list_element': 'li',
     'content_identify': 'id',
     'content_type': 'div',
-    'content_identify_text': 'content'
-}
-task6 = {
-    'server': "https://www.yuanzunxs.cc/go/33366/",
-    'target': "https://www.yuanzunxs.cc/go/33366/",
-    'path': "F:\\迅雷下载\\若情自在天意.txt",
-    'bookname': "若情自在天意",
-    'list_identify': 'id',
-    'list_type': 'div',
-    'list_identify_text': 'list-chapterAll',
-    'list_element': 'dd',
-    'content_identify': 'class',
-    'content_type': 'div',
-    'content_identify_text': 'readcontent'
+    'content_identify_text': 'BookText'
 }
 queue_names = []
 queue_urls = []
@@ -94,13 +69,20 @@ nums = 0
 count = [0]
 rdb = redis.Redis(host="localhost", port=6379, db=0)
 AIOHttp = HttpRequestBase.HttpRequestBase(timeout=200, retries=20, redirect=True)
-db = OracleDBOP.OracleOP("localhost", 1521, "OCDB", "NWSYS", "NW123456")
+db = MySQLOP("localhost", 3306, "network_book", "root", "123456")
 Http = HttpRequestBase.HttpRequestBase(timeout=200, retries=20)
 
 
-def download(tasks):
+def download(bookname, tasks=None):
     global queue_names, queue_urls, task_info, nums, count
-    task_info = tasks
+    if DBQuery(bookname):
+        r = db.query("NW_BOOKSTORE", ["TASK"], {"BOOKNAME": bookname}, [])
+        if r:
+            task_info = eval(r[0][0])
+        elif not tasks:
+            return
+    else:
+        task_info = tasks
     html = Http.requests_request("GET", task_info['target'])
     chapter_list_url_get(html)
     nums = len(queue_urls)
@@ -196,7 +178,7 @@ async def aio_get_chapter(url, name, semaphore):
 
 async def run():
     args = []
-    for i in range(len(queue_urls)):
+    for i in range(16, len(queue_urls), 1):
         args.append((queue_urls[i], queue_names[i]))
     semaphore = asyncio.Semaphore(10)  # 限制并发量为500
     to_get = [aio_get_chapter(*each, semaphore) for each in args]
@@ -263,12 +245,11 @@ def download_miss():
 
 
 def DBQuery(bookname):
-    r = db.query("NW_BOOKSTORE", ["BOOKNAME"], {"BOOKNAME": bookname}, [])
-    for each in r:
-        if len(each) == 1:
-            return True
-        else:
-            return False
+    r = db.query("NW_BOOKSTORE", ["BOOKNAME", "TASK"], {"BOOKNAME": bookname}, [])
+    if len(r) == 1:
+        return True
+    else:
+        return False
 
 
 def DBExport(bookname, path):
@@ -285,28 +266,29 @@ def DBExport(bookname, path):
 
 def DBInsert():
     dic = {"ID": str(uuid.uuid4()), "BOOKNAME": task_info['bookname'], "DOWNLOADURL": task_info['target'],
-           "CHPCOUNT": len(queue_names), "CREATETIME": datetime.datetime.now()}
+           "CHPCOUNT": len(queue_names), "CREATETIME": datetime.datetime.now(), "TASK": str(task_info)}
     with open(task_info['path'], 'rb') as f:
         content = f.read()
         dic["BOOKBLOB"] = content
         dic["BOOKSIZE"] = len(content)
         f.close()
-    db.insert("NW_BOOKSTORE", dic)
+    db.insert("NW_BOOKSTORE", dic, "BOOKBLOB")
     db.close()
 
 
 def DBUpdate():
     dic = {"ID": str(uuid.uuid4()), "BOOKNAME": task_info['bookname'], "DOWNLOADURL": task_info['target'],
-           "CHPCOUNT": len(queue_names), "CREATETIME": ":CREATETIME"}
+           "CHPCOUNT": len(queue_names), "CREATETIME": datetime.datetime.now(), "TASK": "%s"}
     with open(task_info['path'], 'rb') as f:
         content = f.read()
-        dic["BOOKBLOB"] = ":BOOKBLOB"
+        dic["BOOKBLOB"] = "%s"
         dic["BOOKSIZE"] = len(content)
         f.close()
     db.update("NW_BOOKSTORE", dic, {"BOOKNAME": task_info['bookname']},
-              content={"BOOKBLOB": content, "CREATETIME": datetime.datetime.now()})
+              content={"BOOKBLOB": content, "TASK": str(task_info)},
+              blob_key="BOOKBLOB")
     db.close()
 
 
 if __name__ == "__main__":
-    download(task5)
+    download("重生之都市仙尊")
