@@ -8,7 +8,7 @@ import uuid
 import redis
 from bs4 import BeautifulSoup
 
-from BasicLibrarys.Common import HttpRequestBase, OracleDBOP
+from BasicLibrarys.Common import HttpRequestBase
 from BasicLibrarys.Common.MySQLDBOP import MySQLOP
 
 task = {
@@ -51,17 +51,17 @@ task3 = {
     'content_identify_text': 'content'
 }
 task4 = {
-    "server": "https://www.52nsnovel.com",
-    'target': "https://www.52nsnovel.com/book/167/167167/index.html",
-    'path': "F:\\迅雷下载\\高冷总裁宠妻上瘾.txt",
-    'bookname': "高冷总裁宠妻上瘾",
-    'list_identify': 'class',
+    "server": "https://www.xs98.com/xs90084/",
+    'target': "https://www.xs98.com/xs90084/#",
+    'path': "F:\\迅雷下载\\1号霸宠.txt",
+    'bookname': "1号霸宠",
+    'list_identify': 'id',
     'list_type': 'div',
-    'list_identify_text': 'clearfix dirconone',
-    'list_element': 'li',
+    'list_identify_text': 'list',
+    'list_element': 'dd',
     'content_identify': 'id',
     'content_type': 'div',
-    'content_identify_text': 'BookText'
+    'content_identify_text': 'content'
 }
 queue_names = []
 queue_urls = []
@@ -70,7 +70,7 @@ count = [0]
 rdb = redis.Redis(host="localhost", port=6379, db=0)
 AIOHttp = HttpRequestBase.HttpRequestBase(timeout=200, retries=20, redirect=True)
 db = MySQLOP("localhost", 3306, "network_book", "root", "123456")
-Http = HttpRequestBase.HttpRequestBase(timeout=200, retries=20)
+Http = HttpRequestBase.HttpRequestBase(timeout=2000, retries=20)
 
 
 def download(bookname, tasks=None):
@@ -176,9 +176,12 @@ async def aio_get_chapter(url, name, semaphore):
                 res["percent"], res["num"], round(time.process_time(), 2)))
 
 
+sem = asyncio.Semaphore(500)
+
+
 async def run():
     args = []
-    for i in range(16, len(queue_urls), 1):
+    for i in range(0, len(queue_urls), 1):
         args.append((queue_urls[i], queue_names[i]))
     semaphore = asyncio.Semaphore(10)  # 限制并发量为500
     to_get = [aio_get_chapter(*each, semaphore) for each in args]
@@ -291,4 +294,4 @@ def DBUpdate():
 
 
 if __name__ == "__main__":
-    download("重生之都市仙尊")
+    download("1号霸宠", task4)

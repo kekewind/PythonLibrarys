@@ -45,7 +45,21 @@ task3 = {
     'content_type': 'div',
     'content_identify_text': 'content'
 }
+task4 = {
+    "server": "https://www.xs98.com/xs90084/",
+    'target': "https://www.xs98.com/xs90084/#",
+    'path': "F:\\迅雷下载\\1号霸宠.txt",
+    'bookname': "1号霸宠",
+    'list_identify': 'id',
+    'list_type': 'div',
+    'list_identify_text': 'list',
+    'list_element': 'dd',
+    'content_identify': 'id',
+    'content_type': 'div',
+    'content_identify_text': 'content'
+}
 s = DownloadQueue(task1)
-s1 = DownloadQueue(task2)
-s.download()
+s1 = DownloadQueue(task4)
+s1.download()
 # s1.download()
+

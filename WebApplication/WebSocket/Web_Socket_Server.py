@@ -1,12 +1,12 @@
-import sys
-import struct
-from base64 import b64encode
-from hashlib import sha1
-import logging
-from socket import error as SocketError
 import errno
+import logging
+import struct
+import sys
 import uuid
+from base64 import b64encode
 from datetime import datetime
+from hashlib import sha1
+from socket import error as SocketError
 
 if sys.version_info[0] < 3:
     from socketserver import ThreadingMixIn, TCPServer, StreamRequestHandler
@@ -151,7 +151,7 @@ class WebSocketServer(ThreadingMixIn, TCPServer):
         }
         self.clients.append(client)
         self.new_client(client, self)
-        self.send_message(client, str("{id:'" + client["id"] + "'}"))
+        # self.send_message(client, str("{id:'" + client["id"] + "'}"))
         logger.info("New Client from %s:%d id:%s Connected to Server" % (
             handler.client_address[0], handler.client_address[1], client['id']))
 

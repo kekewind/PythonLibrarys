@@ -100,7 +100,7 @@ class VideoToASCII:
             lines += '\n'
             colors.append((255, 255, 255))
         self.rdb.set("frame_" + str(item["index"]), lines)
-        self.rdb.set("color_" + str(item["index"]), colors)
+        self.rdb.set("color_" + str(item["index"]), str(colors))
         del lines, colors, frame
         gc.collect()
         res = {

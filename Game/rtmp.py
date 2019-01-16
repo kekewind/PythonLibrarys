@@ -9,7 +9,7 @@ rtmpUrl = 'rtmp://180.76.142.216:1935/live/stream'
 
 # 视频来源 地址需要替换自己的可识别文件地址
 
-camera = cv2.VideoCapture('F:\\迅雷下载\\Outside Walls\\JJ038.mp4')  # 从文件读取视频
+camera = cv2.VideoCapture(0)  # 从文件读取视频
 # 这里的摄像头可以在树莓派3b上使用
 # camera = cv2.VideoCapture(0) # 参数0表示第一个摄像头 摄像头读取视频
 # if (camera.isOpened()):# 判断视频是否打开
@@ -40,7 +40,7 @@ command = [resource_filename(__name__, "ffmpeg.exe"),
            '-r', str(fps),
            '-i', '-',
            '-c:v', 'libx264',
-           '-acodec', 'copy',
+           '-acodec', 'aac',
            '-pix_fmt', 'yuv420p',
            '-f', 'flv',
            rtmpUrl]

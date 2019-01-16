@@ -14,7 +14,7 @@ from redis import Redis, exceptions as redisex
 
 from BasicLibrarys.Common.FileUtils import FileUtils
 from BigDataAnalysis.ElasticSearch_OP.ESSearcher import ESSearcher
-from CrossPlatform.PythonXCSharp.ParallelForTest import MultiThreadUtils
+#from CrossPlatform.PythonXCSharp.ParallelForTest import MultiThreadUtils
 
 
 class ESOperation:
@@ -113,24 +113,24 @@ class ESOperation:
 
     def json_to_es(self, json_path):
         print("ElasticSearch cluster health status %s" % self.__cluster.health()['status'])
-        file_list = FileUtils.file_scan_by_time(json_path)
-        while len(file_list) > 0:
-            json_file = json_path + file_list.pop()
-            with open(json_file, 'r', encoding='utf-8') as f:
-                chunk = f.read()
-                json_dic = json.loads(chunk)
-                mu = MultiThreadUtils()
-                mu.run(0, len(json_dic), lambda i: self.action_process(json_dic[i]))
-                for success, info in helpers.parallel_bulk(self.es_client, json_dic, chunk_size=100000, queue_size=5,
-                                                           thread_count=5):
-                    if not success:
-                        print(info)
-                print('One json file inserted into ElasticSearch')
-                f.flush()
-                f.close()
-                del json_dic, chunk
-            del f
-            gc.collect()
+        # file_list = FileUtils.file_scan_by_time(json_path)
+        # while len(file_list) > 0:
+        #     json_file = json_path + file_list.pop()
+        #     with open(json_file, 'r', encoding='utf-8') as f:
+        #         chunk = f.read()
+        #         json_dic = json.loads(chunk)
+        #         mu = MultiThreadUtils()
+        #         mu.run(0, len(json_dic), lambda i: self.action_process(json_dic[i]))
+        #         for success, info in helpers.parallel_bulk(self.es_client, json_dic, chunk_size=100000, queue_size=5,
+        #                                                    thread_count=5):
+        #             if not success:
+        #                 print(info)
+        #         print('One json file inserted into ElasticSearch')
+        #         f.flush()
+        #         f.close()
+        #         del json_dic, chunk
+        #     del f
+        #     gc.collect()
 
     def action_process(self, action):
         action['_op_type'] = "index"
@@ -258,7 +258,7 @@ class ESOperation:
                     count = count + 1
                     del each, tmp
                 try:
-                    self.rdb.save()
+                    self.rdb.bgsave()
                 except redisex.ResponseError:
                     pass
                 sys.stdout.write('\r' + 'Already download %d,time_cost:%s' % (count, self.timer.process_time()))
@@ -335,10 +335,10 @@ shippos_mapping = {"mmsi": "long", "pos_time": "float", "Longitude": "double", "
                    "receive_time": "date", "insert_time": "date", "pin.location": "geo_point"}
 es_f = ESOperation(flights_mappings)
 es_s = ESOperation(shippos_mapping)
-es_f.set_index_mapping('flights', 'flight_utc')
+#es_f.set_index_mapping('flights', 'flight_utc')
 # es_s.set_index_mapping('shippos', 'shippos')
-# es_f.es_data_export('54.223.164.155', 'flights', 'flight_utc', 'f:\\Filghts_Data\\',
-#                     sort_obj={"time-ms": {"order": "ASC"}})
+es_f.es_data_export('54.223.164.155', 'flights', 'flight_utc', 'f:\\',
+                    sort_obj={"time-ms": {"order": "ASC"}})
 # es.es_data_export('54.223.164.155', 'shippos', 'shippos', 'f:\\Ships_Data\\',
 #                   sort_obj={"receive_time": {"order": "ASC"}})
 es_f.csv_to_es('H:\\Big_Data\\flights.csv', [13, 14])
