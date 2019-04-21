@@ -1,7 +1,8 @@
 import json
 import logging
+import time
 
-from WebApplication.WebSocket.Web_Socket_Server import WebSocketServer
+from Web_Socket_Server import WebSocketServer
 
 
 def message_received(client, server, msg):
@@ -36,6 +37,16 @@ def message_received(client, server, msg):
         server.send_message(client, "msg is not illegal")
 
 
-socket_server = WebSocketServer(13254, host='192.168.22.159', loglevel=logging.INFO)
+def fun(client, server):
+    with open("WebGisMapToWeb.log", 'r', encoding='utf-8') as f:
+        alls=f.read().replace("\n", "").replace("\t","")
+        infos = json.loads(alls)
+        for each in infos:
+            time.sleep(0.1)
+            server.send_message(client, json.dumps(each))
+
+
+socket_server = WebSocketServer(13254, host='127.0.0.1', loglevel=logging.INFO)
 socket_server.set_fn_message_received(message_received)
+socket_server.set_fn_new_client(fun)
 socket_server.run_forever()

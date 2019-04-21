@@ -14,50 +14,11 @@ from BasicLibrarys.Common.MySQLDBOP import MySQLOP
 task = {
     'server': "http://www.biqugeg.com",
     'target': "http://www.biqugeg.com/48_48938/",
-    'path': "F:\\迅雷下载\\桃运大相师.txt",
-    'bookname': "桃运大相师",
+    'path': "F:\\迅雷下载\\ab.txt",
+    'bookname': "ab",
     'list_identify': 'class',
     'list_type': 'div',
     'list_identify_text': 'listmain',
-    'list_element': 'dd',
-    'content_identify': 'id',
-    'content_type': 'div',
-    'content_identify_text': 'content'
-}
-task2 = {
-    'server': "https://www.biqugexsw.com",
-    'target': "https://www.biqugexsw.com/4_4495/",
-    'path': "F:\\迅雷下载\\女神的布衣兵王.txt",
-    'bookname': "女神的布衣兵王",
-    'list_identify': 'class',
-    'list_type': 'div',
-    'list_identify_text': 'listmain',
-    'list_element': 'dd',
-    'content_identify': 'id',
-    'content_type': 'div',
-    'content_identify_text': 'content'
-}
-task3 = {
-    "server": "https://www.qu.la",
-    'target': "https://www.qu.la/book/85467/",
-    'path': "F:\\迅雷下载\\重生之都市仙尊.txt",
-    'bookname': "重生之都市仙尊",
-    'list_identify': 'id',
-    'list_type': 'div',
-    'list_identify_text': 'list',
-    'list_element': 'dd',
-    'content_identify': 'id',
-    'content_type': 'div',
-    'content_identify_text': 'content'
-}
-task4 = {
-    "server": "https://www.xs98.com/xs90084/",
-    'target': "https://www.xs98.com/xs90084/#",
-    'path': "F:\\迅雷下载\\1号霸宠.txt",
-    'bookname': "1号霸宠",
-    'list_identify': 'id',
-    'list_type': 'div',
-    'list_identify_text': 'list',
     'list_element': 'dd',
     'content_identify': 'id',
     'content_type': 'div',
@@ -294,4 +255,4 @@ def DBUpdate():
 
 
 if __name__ == "__main__":
-    download("1号霸宠", task4)
+    download("重生之都市仙尊", task3)
