@@ -1,11 +1,8 @@
-import uuid
-
 import pymysql
-import datetime
 
 
 class MySQLOP:
-    def __init__(self, host, port, db, user, pwd):
+    def __init__(self, host: str, port: int, db, user, pwd):
         self.host = host if host else '127.0.0.1'
         self.port = port if port else 3306
         self.db = db if db else "network_book"

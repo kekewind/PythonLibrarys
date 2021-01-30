@@ -12,10 +12,10 @@
       </driver-properties>
     </data-source>
     <data-source source="LOCAL" name="MySQL" uuid="ed927770-9ea9-4d44-88f7-9939ef2ef636">
-      <driver-ref>mysql</driver-ref>
+      <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/network_book</jdbc-url>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://47.92.211.200:10024/wechat</jdbc-url>
       <driver-properties>
         <property name="autoReconnect" value="true" />
         <property name="zeroDateTimeBehavior" value="convertToNull" />
@@ -23,6 +23,7 @@
         <property name="characterEncoding" value="utf8" />
         <property name="characterSetResults" value="utf8" />
         <property name="yearIsDateType" value="false" />
+        <property name="serverTimezone" value="Asia/Shanghai" />
       </driver-properties>
     </data-source>
     <data-source source="LOCAL" name="JKYDB" uuid="8e7087a4-a2a5-42c0-9275-6ce5f8c88705">

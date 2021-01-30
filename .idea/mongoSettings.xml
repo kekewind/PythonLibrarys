@@ -4,18 +4,6 @@
     <option name="serverConfigurations">
       <list>
         <ServerConfiguration>
-          <option name="label" value="MMC" />
-          <option name="serverUrls">
-            <list>
-              <option value="localhost:27017" />
-            </list>
-          </option>
-          <option name="sshTunnelingConfiguration">
-            <SshTunnelingConfiguration />
-          </option>
-          <option name="userDatabase" value="mmc" />
-        </ServerConfiguration>
-        <ServerConfiguration>
           <option name="label" value="Torrents" />
           <option name="serverUrls">
             <list>
@@ -26,6 +14,18 @@
             <SshTunnelingConfiguration />
           </option>
           <option name="userDatabase" value="torrents" />
+        </ServerConfiguration>
+        <ServerConfiguration>
+          <option name="label" value="MMC" />
+          <option name="serverUrls">
+            <list>
+              <option value="localhost:27017" />
+            </list>
+          </option>
+          <option name="sshTunnelingConfiguration">
+            <SshTunnelingConfiguration />
+          </option>
+          <option name="userDatabase" value="mmc" />
         </ServerConfiguration>
       </list>
     </option>

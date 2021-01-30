@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="NWDB">
-  <database-model serializer="dbm" dbms="ORACLE" family-id="ORACLE" format-version="4.14">
+  <database-model serializer="dbm" dbms="ORACLE" family-id="ORACLE" format-version="4.17">
     <root id="1">
       <ServerVersion>11.2.0.1.0</ServerVersion>
     </root>
@@ -58,7 +58,6 @@
       <ModifiedTimestamp>2018-11-24.01:22:26</ModifiedTimestamp>
       <IntrospectionTimestamp>2018-11-24.01:22:29</IntrospectionTimestamp>
       <Current>1</Current>
-      <Visible>1</Visible>
     </schema>
     <schema id="19" parent="1" name="OE">
       <ObjectId>86</ObjectId>

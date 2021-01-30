@@ -10,7 +10,7 @@ import uuid
 
 import redis
 from bs4 import BeautifulSoup
-from selenium import webdriver
+from selenium.webdriver.edge import webdriver
 
 from BasicLibrarys.Common import HttpRequestBase
 from BigDataAnalysis.NeuralNetwork.FaceDetector import FaceRecognition
@@ -25,8 +25,8 @@ class ImageClaw:
         self.__threads = {}
         self.request_image = "http://image.baidu.com/search/acjson?tn=resultjson_com&ipn=rj&fp=result&word={0}&pn={1}&rn=30"
         self.server = "http://image.baidu.com/search/index?tn=baiduimage&word={0}"
-        self.chrome_driver = "D:\Software\Python3.6.5\selenium\webdriver\chromedriver.exe"
-        self.edge_driver = "D:\Software\Python3.6.5\selenium\webdriver\MicrosoftWebDriver.exe"
+        self.chrome_driver = "D:\\Software\\Python3.7.3\\selenium\\webdriver\\chromedriver.exe"
+        self.edge_driver = "D:\Software\Python3.7.3\selenium\webdriver\MicrosoftWebDriver.exe"
         self.__guid = str(uuid.uuid4())
         if os.path.exists(os.getcwd()):
             for root, dirs, files in os.walk(os.getcwd()):
@@ -92,7 +92,7 @@ class ImageClaw:
         print("\nDownloaded image count %d ,missed count %d" % (downloaded, miss))
 
     def __search_image_url_by_browser(self):
-        driver = webdriver.Chrome(self.chrome_driver)
+        driver = webdriver.WebDriver(executable_path=self.edge_driver,  port=17556)
         driver.maximize_window()
         driver.get(self.server.format(self.task_info["key_word"]))
         height = 0
@@ -230,10 +230,10 @@ class ImageClaw:
 
 
 task = {
-    "key_word": "Kate Upton",
-    "sample_dir": "E:\\Python_Pycharm_Workspace\\PythonLibrarys\\BigDataAnalysis\\NeuralNetwork\\Samples\\face_train_samples",
+    "key_word": "Kayden Kross",
+    "sample_dir": "f:\\train",
     "module_save_path": None,
-    "image_save_path": "G:\\迅雷下载"
+    "image_save_path": "F:\\down"
 }
 a = ImageClaw(task_info=task)
 a.claw_by_face_recognition()

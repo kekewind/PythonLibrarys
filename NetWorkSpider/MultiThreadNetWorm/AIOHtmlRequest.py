@@ -9,16 +9,15 @@ import redis
 from bs4 import BeautifulSoup
 
 from BasicLibrarys.Common import HttpRequestBase
-from BasicLibrarys.Common.MySQLDBOP import MySQLOP
 
 task = {
-    'server': "http://www.biqugeg.com",
-    'target': "http://www.biqugeg.com/48_48938/",
-    'path': "F:\\迅雷下载\\ab.txt",
-    'bookname': "ab",
-    'list_identify': 'class',
+    'server': "https://www.gebiqu.com",
+    'target': "https://www.gebiqu.com/biquge_1889/",
+    'path': "F:\\迅雷下载\\两世欢.txt",
+    'bookname': "两世欢",
+    'list_identify': 'id',
     'list_type': 'div',
-    'list_identify_text': 'listmain',
+    'list_identify_text': 'list',
     'list_element': 'dd',
     'content_identify': 'id',
     'content_type': 'div',
@@ -30,20 +29,20 @@ nums = 0
 count = [0]
 rdb = redis.Redis(host="localhost", port=6379, db=0)
 AIOHttp = HttpRequestBase.HttpRequestBase(timeout=200, retries=20, redirect=True)
-db = MySQLOP("localhost", 3306, "network_book", "root", "123456")
+db = None  # MySQLOP("localhost", 3306, "network_book", "root", "123456")
 Http = HttpRequestBase.HttpRequestBase(timeout=2000, retries=20)
 
 
 def download(bookname, tasks=None):
     global queue_names, queue_urls, task_info, nums, count
-    if DBQuery(bookname):
-        r = db.query("NW_BOOKSTORE", ["TASK"], {"BOOKNAME": bookname}, [])
-        if r:
-            task_info = eval(r[0][0])
-        elif not tasks:
-            return
-    else:
-        task_info = tasks
+    # if False:  # DBQuery(bookname):
+    #     # r = db.query("NW_BOOKSTORE", ["TASK"], {"BOOKNAME": bookname}, [])
+    #     if r:
+    #         task_info = eval(r[0][0])
+    #     elif not tasks:
+    #         return
+    # else:
+    task_info = tasks
     html = Http.requests_request("GET", task_info['target'])
     chapter_list_url_get(html)
     nums = len(queue_urls)
@@ -255,4 +254,4 @@ def DBUpdate():
 
 
 if __name__ == "__main__":
-    download("重生之都市仙尊", task3)
+    download("两世欢", task)
